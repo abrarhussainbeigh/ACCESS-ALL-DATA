@@ -5,32 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram WebApp Debug</title>
     <script>
-        function getUserInfo() {
-            let outputDiv = document.getElementById("output"); // TextView jisme data show hoga
-            let debugText = "";
+    function getUserInfo() {
+        let outputDiv = document.getElementById("output");
 
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();  // API Initialize
-                let userData = window.Telegram.WebApp.initDataUnsafe;
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            let userData = window.Telegram.WebApp.initDataUnsafe;
 
-                debugText += "✅ Telegram WebApp Loaded!<br><br>";
-                debugText += "<b>Full Data:</b><br>" + JSON.stringify(userData, null, 2) + "<br><br>";
+            outputDiv.innerHTML = "<b>Telegram WebApp API Loaded!</b><br><br>";
+            outputDiv.innerHTML += "<b>Full Data:</b> " + JSON.stringify(userData, null, 2) + "<br>";
 
-                if (userData && userData.user) {
-                    debugText += "<b>👤 User ID:</b> " + userData.user.id + "<br>";
-                    debugText += "<b>🔤 Username:</b> @" + (userData.user.username || "Not Set") + "<br>";
-                    debugText += "<b>📝 First Name:</b> " + userData.user.first_name + "<br>";
-                    debugText += "<b>📝 Last Name:</b> " + (userData.user.last_name || "Not Set") + "<br>";
-                } else {
-                    debugText += "❌ User data not found!<br>";
-                }
+            if (userData && userData.user) {
+                outputDiv.innerHTML += "<b>User ID:</b> " + userData.user.id + "<br>";
+                outputDiv.innerHTML += "<b>Username:</b> @" + (userData.user.username || "Not Set") + "<br>";
             } else {
-                debugText = "❌ Telegram WebApp API Not Loaded!";
+                outputDiv.innerHTML += "<b>❌ User data not received!</b><br>";
             }
-
-            outputDiv.innerHTML = debugText; // Data page pe show karega
+        } else {
+            outputDiv.innerHTML = "<b>❌ Telegram WebApp API Not Loaded!<br>Try opening from a bot button.</b>";
         }
-    </script>
+    }
+        getUserInfo();
+</script>
 </head>
 <body onload="getUserInfo()">
     <h1>📢 Telegram WebApp Debugger</h1>
