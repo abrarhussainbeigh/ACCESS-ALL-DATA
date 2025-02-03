@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram WebApp Example</title>
+    <script>
+        function getUserInfo() {
+            if (window.Telegram.WebApp) {
+                let userData = window.Telegram.WebApp.initDataUnsafe;
+                console.log(userData); // Yeh console me sari details dega
+
+                if (userData && userData.user) {
+                    let chatId = userData.user.id; // Yeh user ka unique ID hai
+                    document.getElementById("user-id").innerText = "Your Chat ID: " + chatId;
+                } else {
+                    document.getElementById("user-id").innerText = "User data not found!";
+                }
+            }
+        }
+    </script>
+</head>
+<body onload="getUserInfo()">
+    <h1>Welcome to Telegram Web App</h1>
+    <p id="user-id">Fetching user data...</p>
+</body>
+</html>
