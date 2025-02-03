@@ -27,34 +27,42 @@
     <div id="output">Fetching user data...</div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        function getQueryParams() {
+            let queryString = window.location.hash.substring(1); // Remove `#`
+            let params = new URLSearchParams(queryString);
+            return Object.fromEntries(params.entries());
+        }
+
+        function parseTelegramData() {
             let outputDiv = document.getElementById("output");
+            let params = getQueryParams();
 
-            // Check if Telegram WebApp API is available
-            if (window.Telegram && window.Telegram.WebApp) {
-                let tg = window.Telegram.WebApp;
-                tg.ready();  // Initialize WebApp
-
-                // Fetch User Data from Telegram WebApp API
-                let userData = tg.initDataUnsafe;
-                console.log(userData); // Debugging
-
-                if (userData && userData.user) {
-                    outputDiv.innerHTML = `
-                        <b>✅ Telegram WebApp API Loaded!</b><br><br>
-                        <b>👤 User ID:</b> ${userData.user.id} <br>
-                        <b>🔤 Username:</b> @${userData.user.username || "Not Set"} <br>
-                        <b>📝 First Name:</b> ${userData.user.first_name} <br>
-                        <b>📝 Last Name:</b> ${userData.user.last_name || "Not Set"} <br>
-                    `;
-                } else {
-                    outputDiv.innerHTML = "<b>❌ User data not received!</b>";
-                }
-
-            } else {
-                outputDiv.innerHTML = "<b>❌ Telegram WebApp API Not Loaded!<br>Try opening from a bot button.</b>";
+            if (!params.tgWebAppData) {
+                outputDiv.innerHTML = "<b>❌ No Telegram data found in URL.</b>";
+                return;
             }
-        });
+
+            try {
+                let rawData = decodeURIComponent(params.tgWebAppData);
+                let dataParams = new URLSearchParams(rawData);
+                let userData = JSON.parse(dataParams.get("user"));
+
+                outputDiv.innerHTML = `
+                    <b>✅ Telegram WebApp Data Found!</b><br><br>
+                    <b>👤 User ID:</b> ${userData.id} <br>
+                    <b>🔤 Username:</b> @${userData.username || "Not Set"} <br>
+                    <b>📝 First Name:</b> ${userData.first_name} <br>
+                    <b>📝 Last Name:</b> ${userData.last_name || "Not Set"} <br>
+                    <b>🌐 Language:</b> ${userData.language_code} <br>
+                    <b>🖼 Profile Photo:</b> <br>
+                    <img src="${userData.photo_url}" width="100">
+                `;
+            } catch (error) {
+                outputDiv.innerHTML = `<b>⚠️ Error parsing data:</b> ${error.message}`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", parseTelegramData);
     </script>
 
 </body>
