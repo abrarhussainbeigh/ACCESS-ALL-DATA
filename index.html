@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Telegram WebApp</title>
+    <title>Telegram WebApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        #output {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Testing Telegram WebApp API</h1>
+
+    <h2>📢 Telegram WebApp Debugger</h2>
+    <div id="output">Fetching user data...</div>
+
     <script>
-        if (window.Telegram && window.Telegram.WebApp) {
-            document.body.innerHTML += "<p>✅ Telegram WebApp API is working!</p>";
-        } else {
-            document.body.innerHTML += "<p>❌ Telegram WebApp API is NOT loaded.</p>";
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            let outputDiv = document.getElementById("output");
+
+            // Check if Telegram WebApp API is available
+            if (window.Telegram && window.Telegram.WebApp) {
+                let tg = window.Telegram.WebApp;
+                tg.ready();  // Initialize WebApp
+
+                // Fetch User Data from Telegram WebApp API
+                let userData = tg.initDataUnsafe;
+                console.log(userData); // Debugging
+
+                if (userData && userData.user) {
+                    outputDiv.innerHTML = `
+                        <b>✅ Telegram WebApp API Loaded!</b><br><br>
+                        <b>👤 User ID:</b> ${userData.user.id} <br>
+                        <b>🔤 Username:</b> @${userData.user.username || "Not Set"} <br>
+                        <b>📝 First Name:</b> ${userData.user.first_name} <br>
+                        <b>📝 Last Name:</b> ${userData.user.last_name || "Not Set"} <br>
+                    `;
+                } else {
+                    outputDiv.innerHTML = "<b>❌ User data not received!</b>";
+                }
+
+            } else {
+                outputDiv.innerHTML = "<b>❌ Telegram WebApp API Not Loaded!<br>Try opening from a bot button.</b>";
+            }
+        });
     </script>
+
 </body>
 </html>
