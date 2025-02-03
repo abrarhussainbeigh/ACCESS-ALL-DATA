@@ -3,83 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram WebApp Debugger</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            padding: 20px;
-            text-align: center;
-        }
-        #output {
-            white-space: pre-wrap;
-            font-family: monospace;
-            background: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-        }
-        h1 {
-            color: #0078FF;
-        }
-    </style>
+    <title>Test Telegram WebApp</title>
 </head>
 <body>
-    <h1>📢 Telegram WebApp Debugger</h1>
-    <p id="output">Fetching user data...</p>
-
+    <h1>Testing Telegram WebApp API</h1>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let outputDiv = document.getElementById("output");
-
-        // Check if Telegram WebApp API is available
         if (window.Telegram && window.Telegram.WebApp) {
-            let tg = window.Telegram.WebApp;
-            tg.ready();  // Initialize WebApp
-
-            // Fetch User Data from Telegram WebApp API
-            let userData = tg.initDataUnsafe;
-
-            // Display Debug Info
-            let debugText = "<b>✅ Telegram WebApp API Loaded!</b><br><br>";
-            debugText += "<b>Full Data:</b><br><pre>" + JSON.stringify(userData, null, 2) + "</pre><br>";
-
-            // Fetch User ID and other info
-            if (userData && userData.user) {
-                debugText += "<b>👤 User ID:</b> " + userData.user.id + "<br>";
-                debugText += "<b>🔤 Username:</b> @" + (userData.user.username || "Not Set") + "<br>";
-                debugText += "<b>📝 First Name:</b> " + userData.user.first_name + "<br>";
-                debugText += "<b>📝 Last Name:</b> " + (userData.user.last_name || "Not Set") + "<br>";
-                
-                // Get Chat ID
-                let chatId = userData.chat.id; // This is where you get the chat ID
-                debugText += "<b>💬 Chat ID:</b> " + chatId + "<br>";
-            } else {
-                debugText += "<b>❌ User data not received!</b><br>";
-            }
-
-            outputDiv.innerHTML = debugText;
-
+            document.body.innerHTML += "<p>✅ Telegram WebApp API is working!</p>";
         } else {
-            outputDiv.innerHTML = "<b>❌ Telegram WebApp API Not Loaded!<br>Try opening from a bot button.</b>";
+            document.body.innerHTML += "<p>❌ Telegram WebApp API is NOT loaded.</p>";
         }
-
-        // Check the environment
-        let environmentInfo = "<br><b>Environment Info:</b><br>";
-        if (window.Telegram && window.Telegram.WebApp) {
-            environmentInfo += "Running in Telegram WebApp.<br>";
-        } else if (window.navigator.userAgent.includes("Telegram")) {
-            environmentInfo += "Running in Telegram app (not WebApp).<br>";
-        } else {
-            environmentInfo += "Running in a standard web browser.<br>";
-        }
-
-        outputDiv.innerHTML += environmentInfo;
-    });
-
-        alert(window.Telegram.WebApp.initDataUnsafe);
-</script>
+    </script>
 </body>
 </html>
