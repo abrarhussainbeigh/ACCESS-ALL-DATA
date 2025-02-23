@@ -3,57 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Login</title>
+    <title>Telegram User Info</title>
 </head>
 <body>
 
-    <h2>Login with Telegram</h2>
+    <h2>Get Telegram User Info</h2>
     
-    <!-- Telegram Login Widget -->
     <script async src="https://telegram.org/js/telegram-widget.js?7"
         data-telegram-login="Uvjvjv_bot"
         data-size="large"
         data-userpic="true"
         data-request-access="write"
-        onAuth="onTelegramAuth(user)"></script>
+        onAuth="getUserData(user)"></script>
 
-    <!-- User Info Will Appear Here -->
     <div id="user-info" style="display: none;">
         <h3>Welcome, <span id="name"></span>!</h3>
         <p><strong>Telegram ID:</strong> <span id="id"></span></p>
-        <p><strong>Username:</strong> @<span id="username"></span></p>
         <img id="profile-pic" src="" alt="Profile Picture" width="100">
-        <button onclick="logout()">Logout</button>
     </div>
 
     <script>
-        function onTelegramAuth(user) {
-            // Save user data in localStorage
-            localStorage.setItem("telegramUser", JSON.stringify(user));
-            showUserInfo(user);
-        }
-
-        function showUserInfo(user) {
+        function getUserData(user) {
             document.getElementById("name").textContent = user.first_name;
             document.getElementById("id").textContent = user.id;
-            document.getElementById("username").textContent = user.username || "No Username";
             document.getElementById("profile-pic").src = user.photo_url || "";
-
             document.getElementById("user-info").style.display = "block";
         }
-
-        function logout() {
-            localStorage.removeItem("telegramUser");
-            document.getElementById("user-info").style.display = "none";
-        }
-
-        // Check if user is already logged in
-        window.onload = function() {
-            let savedUser = localStorage.getItem("telegramUser");
-            if (savedUser) {
-                showUserInfo(JSON.parse(savedUser));
-            }
-        };
     </script>
 
 </body>
