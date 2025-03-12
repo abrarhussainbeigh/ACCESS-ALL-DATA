@@ -1,49 +1,180 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Login Demo</title>
+    <title>Scan & Explore - Recipe Analyzer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* General Styling */
+        body {
+            background: linear-gradient(to bottom, #86efac, #fef9c3, #93c5fd);
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Comic Neue', sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .spin {
+            animation: spin 20s linear infinite;
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Background Elements */
+        .background-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+            mix-blend-mode: multiply;
+        }
+
+        .circle-1 {
+            width: 160px;
+            height: 160px;
+            background: #facc15;
+            top: 80px;
+            left: 80px;
+            animation: spin 20s linear infinite;
+        }
+
+        .circle-2 {
+            width: 128px;
+            height: 128px;
+            background: #4ade80;
+            bottom: 160px;
+            right: 160px;
+            animation: spin 20s linear infinite reverse;
+        }
+
+        /* Header */
+        h1 {
+            font-size: 3.5rem;
+            font-family: 'Chewy', cursive;
+            color: #16a34a;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 .sub-title {
+            font-size: 1.8rem;
+            color: #facc15;
+            margin-top: 10px;
+        }
+
+        /* QR Code Section */
+        .qr-container {
+            position: relative;
+            display: inline-block;
+            padding: 24px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .qr-container:hover {
+            transform: scale(1.05);
+        }
+
+        .qr-glow {
+            position: absolute;
+            top: -16px;
+            left: -16px;
+            right: -16px;
+            bottom: -16px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #4ade80, #60a5fa);
+            filter: blur(20px);
+            opacity: 0.75;
+            z-index: -1;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+
+        /* Floating Food Icons */
+        .food-icon {
+            font-size: 2rem;
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .icon-1 { top: 20%; left: 10%; animation-delay: 0.3s; font-size: 2.5rem; }
+        .icon-2 { top: 30%; right: 20%; animation-delay: 0.7s; font-size: 3rem; }
+        .icon-3 { bottom: 15%; left: 25%; animation-delay: 1.1s; font-size: 3.5rem; }
+        .icon-4 { bottom: 25%; right: 30%; animation-delay: 1.5s; font-size: 2rem; }
+
+    </style>
 </head>
 <body>
-    <h2>Login with Telegram</h2>
 
-    <!-- Telegram Login Widget -->
-    <script async src="https://telegram.org/js/telegram-widget.js?7"
-        data-telegram-login="Uvjvjv_bot"
-        data-size="large"
-        data-userpic="true"
-        data-request-access="write"
-        data-auth-url="https://abrarhussainbeigh.github.io/ACCESS-ALL-DATA/">
-    </script>
+    <!-- Background Circles -->
+    <div class="background-circle circle-1 spin"></div>
+    <div class="background-circle circle-2 spin"></div>
 
-    <div id="user-info" style="display: none;">
-        <h3>Welcome, <span id="name"></span>!</h3>
-        <p><strong>Telegram ID:</strong> <span id="id"></span></p>
-        <p><strong>Username:</strong> <span id="username"></span></p>
-        <img id="profile-pic" src="" alt="Profile Picture" width="100">
+    <div class="container">
+        <h1>
+            🍳 Scan & Explore
+            <div class="sub-title">Recipe & Nutrition Analyzer</div>
+        </h1>
+
+        <div class="qr-container">
+            <div class="qr-glow"></div>
+            <a href="https://v0-react-app-from-file.vercel.app/">
+                <div id="qrcode"></div>
+            </a>
+        </div>
+
+        <p style="margin-top: 40px; font-size: 1.5rem; font-weight: bold; color: #16a34a;">
+            📸 Scan me to unlock:<br>
+            <span style="color: #facc15;">Analyze your recipes and get detailed nutritional information.</span>
+        </p>
     </div>
 
-    <script>
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            let data = {};
-            for (let pair of params.entries()) {
-                data[pair[0]] = pair[1];
-            }
-            return data;
-        }
+    <!-- Floating Food Icons -->
+    <div class="food-icon icon-1">🥔</div>
+    <div class="food-icon icon-2">🫛</div>
+    <div class="food-icon icon-3">🥬</div>
+    <div class="food-icon icon-4">🫑</div>
 
-        const userData = getQueryParams();
-        if (userData && userData.id) {
-            document.getElementById("name").textContent = userData.first_name || "User";
-            document.getElementById("id").textContent = userData.id;
-            document.getElementById("username").textContent = userData.username ? "@" + userData.username : "N/A";
-            if (userData.photo_url) {
-                document.getElementById("profile-pic").src = userData.photo_url;
-            }
-            document.getElementById("user-info").style.display = "block";
+    <script>
+        function generateQR() {
+            let url = "https://v0-react-app-from-file.vercel.app/";
+            document.getElementById("qrcode").innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#2d3748",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
         }
+        generateQR();
     </script>
+
 </body>
 </html>
